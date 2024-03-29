@@ -1,28 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
+from firebase_db import save_property
+from property import Property
+from dotenv import load_dotenv
+import os
 
-class Property:
-    def __init__(self, date, title, area, price, town, address, term, announcement):
-        self.date = date
-        self.title = title
-        self.area = area
-        self.price = price
-        self.town = town
-        self.address = address
-        self.term = term
-        self.announcement = announcement
 
-    def __str__(self):
-        return(
-            f"Дата: {date}\n"
-            f"Заглавие: {title}\n"
-            f"Площ: {area}\n"
-            f"Цена: {price}\n"
-            f"Населено място: {town}\n"
-            f"Адрес: {address}\n"
-            f"Срок: {term}\n"
-            f"Обявяване на: {announcement}\n"
-        )
+load_dotenv()
 
 url = "https://sales.bcpea.org/properties"
 response = requests.get(url)
@@ -61,4 +45,5 @@ for item in items:
 
 for property in properties:
     print(property)
+    save_property(property)
     print("-" * 50)
