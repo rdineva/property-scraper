@@ -24,6 +24,8 @@ for item in items:
     labels = item.find_all(class_='label')
     infos = item.find_all(class_='info')
 
+    link = item.find('a', href=True)['href']
+
     town = address = term = announcement = ""
 
     for index, (label, info) in enumerate(zip(labels, infos)):
@@ -40,7 +42,7 @@ for item in items:
             announcement = value
 
 
-    property = Property(date, title, area, price, town, address, term, announcement)
+    property = Property(date, title, area, price, town, address, term, announcement, link)
     properties.append(property)
 
 for property in properties:

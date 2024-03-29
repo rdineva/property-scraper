@@ -1,5 +1,5 @@
 class Property:
-    def __init__(self, date, title, area, price, town, address, term, announcement):
+    def __init__(self, date, title, area, price, town, address, term, announcement, link):
         self.date = date
         self.title = title
         self.area = area
@@ -8,6 +8,7 @@ class Property:
         self.address = address
         self.term = term
         self.announcement = announcement
+        self.link = link
 
     def __str__(self):
         return(
@@ -19,4 +20,5 @@ class Property:
             f"Адрес: {self.address}\n"
             f"Срок: {self.term}\n"
             f"Обявяване на: {self.announcement}\n"
+            f"Линк: {self.link}\n"
         )
