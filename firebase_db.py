@@ -11,8 +11,11 @@ firebase_admin.initialize_app(credentials.Certificate(firebase_credentials), {
     "databaseURL": os.getenv("FIREBASE_DATABASE_URL")
 })
 
+def get_properties():
+    return db.reference("/properties")
+
 def save_property(property_obj):
-    ref = db.reference("/properties")
+    ref = get_properties()
     ref.push({
         "date": property_obj.date,
         "title": property_obj.title,
