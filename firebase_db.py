@@ -28,7 +28,9 @@ def save_properties(properties_list):
             "town": property_obj.town,
             "address": property_obj.address,
             "term": property_obj.term,
-            "announcement": property_obj.announcement
+            "announcement": property_obj.announcement,
+            "link": property_obj.link,
         }
 
-    ref.update(properties_to_save)
+    if properties_to_save:
+        ref.update(properties_to_save)

@@ -59,3 +59,4 @@ def save_scraped_data(scraped_properties: List[Property]):
             new_properties.append(property)
 
     save_properties(new_properties)
+    return new_properties

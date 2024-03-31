@@ -1,14 +1,25 @@
 from scraper import scrape, save_scraped_data
+from email_service import send_email
+from property import concatenate_properties
+from constants import BASE_URL, SOFIA_QUERY_PARAMS, PLOVDIV_QUERY_PARAMS, PER_PAGE_PARAM
 
 
-BASE_URL = "https://sales.bcpea.org/properties"
-PLOVDIV_QUERY_PARAMS = "court=16&city=3598"
-SOFIA_QUERY_PARAMS = "court=28&city=4389"
+scraped_properties = []
 
-# Sofia
-scraped_properties = scrape(f"{BASE_URL}?{SOFIA_QUERY_PARAMS}")
-save_scraped_data(scraped_properties)
+sofia_scraped = scrape(f"{BASE_URL}?{PER_PAGE_PARAM}&{SOFIA_QUERY_PARAMS}")
+scraped_properties.append(sofia_scraped)
 
-# Plovdiv
-scraped_properties = scrape(f"{BASE_URL}?{PLOVDIV_QUERY_PARAMS}")
-save_scraped_data(scraped_properties)
+plovdiv_scraped = scrape(f"{BASE_URL}?{PER_PAGE_PARAM}&{PLOVDIV_QUERY_PARAMS}")
+scraped_properties.append(plovdiv_scraped)
+
+def flatten(nested_list):
+    return [item for sublist in nested_list for item in sublist]
+
+properties = flatten(scraped_properties)
+new_properties = save_scraped_data(properties)
+
+if new_properties:
+    property_details = concatenate_properties(new_properties)
+    send_email("Нови Имоти в ЧСИ", property_details, "radinadineva@icloud.com")
+else:
+    print("Няма нови имоти според зададените критерии!")

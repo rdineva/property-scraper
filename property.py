@@ -1,3 +1,6 @@
+from constants import BASE_URL
+
+
 class Property:
     def __init__(self, date, title, area, price, town, address, term, announcement, link):
         self.date = date
@@ -20,5 +23,11 @@ class Property:
             f"Адрес: {self.address}\n"
             f"Срок: {self.term}\n"
             f"Обявяване на: {self.announcement}\n"
-            f"Линк: {self.link}\n"
+            f"Линк: {BASE_URL}{self.link}\n"
         )
+
+def concatenate_properties(properties):
+    concatenated_text = ""
+    for property_obj in properties:
+        concatenated_text += str(property_obj) + "\n"
+    return concatenated_text
