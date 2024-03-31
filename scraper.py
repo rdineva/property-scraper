@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from firebase_db import save_property, get_properties
+from firebase_db import save_properties, get_properties
 from property import Property
 from typing import List
 
@@ -44,14 +44,18 @@ def get_property_data(item: str):
         elif "ОБЯВЯВАНЕ НА" in key:
             announcement = value
 
-    new_property = Property(date, title, area, price, town, address, term, announcement, link)
-    return new_property
+    property = Property(date, title, area, price, town, address, term, announcement, link)
+    return property
 
 
-def save_scraped_data(new_properties: List[Property]):
+def save_scraped_data(scraped_properties: List[Property]):
     ref = get_properties()
 
-    for property in new_properties:
+    new_properties = []
+    for property in scraped_properties:
         same_properties = ref.order_by_child("link").equal_to(property.link).get()
+
         if not same_properties:
-            save_property(property)
+            new_properties.append(property)
+
+    save_properties(new_properties)

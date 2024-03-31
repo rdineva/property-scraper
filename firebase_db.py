@@ -14,15 +14,21 @@ firebase_admin.initialize_app(credentials.Certificate(firebase_credentials), {
 def get_properties():
     return db.reference("/properties")
 
-def save_property(property_obj):
+def save_properties(properties_list):
     ref = get_properties()
-    ref.push({
-        "date": property_obj.date,
-        "title": property_obj.title,
-        "area": property_obj.area,
-        "price": property_obj.price,
-        "town": property_obj.town,
-        "address": property_obj.address,
-        "term": property_obj.term,
-        "announcement": property_obj.announcement
-    })
+    properties_to_save = {}
+
+    for property_obj in properties_list:
+        property_key = ref.push().key
+        properties_to_save[property_key] = {
+            "date": property_obj.date,
+            "title": property_obj.title,
+            "area": property_obj.area,
+            "price": property_obj.price,
+            "town": property_obj.town,
+            "address": property_obj.address,
+            "term": property_obj.term,
+            "announcement": property_obj.announcement
+        }
+
+    ref.update(properties_to_save)
