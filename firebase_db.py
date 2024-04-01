@@ -33,4 +33,8 @@ def save_properties(properties_list):
         }
 
     if properties_to_save:
-        ref.update(properties_to_save)
+        try:
+            ref.update(properties_to_save)
+        except Exception as e:
+            raise Exception(f"Failed to save to Firebase: {e}")
+

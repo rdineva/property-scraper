@@ -30,4 +30,4 @@ def send_email(subject, message, to_email):
         server.quit()
         print("Email sent successfully!")
     except Exception as e:
-        print(f"Failed to send email: {e}")
+        raise Exception(f"Failed to send email: {e}")
