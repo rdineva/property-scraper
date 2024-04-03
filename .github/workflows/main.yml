@@ -2,7 +2,7 @@ name: Run Scraper
 
 on:
   schedule:
-    - cron: '0 12 * * *'  # Runs every day at noon UTC. Adjust to your needs.
+    - cron: '0 12 * * *'
 
 jobs:
   build:
@@ -24,9 +24,13 @@ jobs:
       run: |
         pip install --no-cache-dir -v -r requirements.txt
 
-    - name: Run script
+    - name: Run Script for Scraping Properties
       env:
         FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
         FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
+        SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        SMTP_EMAIL: ${{ secrets.SMTP_EMAIL }}
+        SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+        RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
       run: |
         python main.py

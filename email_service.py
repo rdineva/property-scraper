@@ -6,27 +6,24 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-smtp_password = os.getenv("SMTP_PASSWORD")
+
+SMTP_SERVER = os.getenv("SMTP_SERVER")
+SMTP_EMAIL = os.getenv("SMTP_EMAIL")
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
+SMTP_PORT = 465
+
 
 def send_email(subject, message, to_email):
-    # ABV.bg SMTP server configuration
-    SMTP_SERVER = 'smtp.abv.bg'
-    SMTP_PORT = 465
-    SMTP_USERNAME = 'spacex13@abv.bg'
-    SMTP_PASSWORD = smtp_password
-
-    # Create the email message
     msg = MIMEMultipart()
     msg.attach(MIMEText(message, 'plain', 'utf-8'))
     msg['Subject'] = subject
-    msg['From'] = SMTP_USERNAME
+    msg['From'] = SMTP_EMAIL
     msg['To'] = to_email
 
-    # Send the email
     try:
         server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT)
-        server.login(SMTP_USERNAME, SMTP_PASSWORD)
-        server.sendmail(SMTP_USERNAME, [to_email], msg.as_string())
+        server.login(SMTP_EMAIL, SMTP_PASSWORD)
+        server.sendmail(SMTP_EMAIL, [to_email], msg.as_string())
         server.quit()
         print("Email sent successfully!")
     except Exception as e:

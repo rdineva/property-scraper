@@ -4,7 +4,7 @@ Web Scraper for the register of public sales of properties by private bailiffs i
 
 Website: https://sales.bcpea.org/properties
 
-## Setup
+## Local Dev Setup
 Create `.env` file from `.env.template`
 
 Install dependencies:
