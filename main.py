@@ -28,4 +28,5 @@ if new_properties:
     property_details = concatenate_properties(new_properties)
     send_email("Нови Имоти от ЧСИ", property_details, RECEIVER_EMAIL)
 else:
+    send_email("Няма нови имоти", "-", RECEIVER_EMAIL)
     print("Няма нови имоти според зададените критерии!")

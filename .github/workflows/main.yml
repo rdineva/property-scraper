@@ -3,6 +3,7 @@ name: Run Scraper
 on:
   schedule:
     - cron: '0 12 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -28,9 +29,8 @@ jobs:
       env:
         FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
         FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
-        SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         SMTP_EMAIL: ${{ secrets.SMTP_EMAIL }}
-        SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
         RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
+        SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
       run: |
         python main.py

@@ -3,3 +3,4 @@ python-dotenv
 requests
 beautifulsoup4
 future==0.18.2
+sendgrid

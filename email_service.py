@@ -1,30 +1,20 @@
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 import os
 from dotenv import load_dotenv
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 load_dotenv()
 
-
-SMTP_SERVER = os.getenv("SMTP_SERVER")
 SMTP_EMAIL = os.getenv("SMTP_EMAIL")
-SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
-SMTP_PORT = 465
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
-
-def send_email(subject, message, to_email):
-    msg = MIMEMultipart()
-    msg.attach(MIMEText(message, 'plain', 'utf-8'))
-    msg['Subject'] = subject
-    msg['From'] = SMTP_EMAIL
-    msg['To'] = to_email
+def send_email(subject, content, to_email):
+    message = Mail(SMTP_EMAIL, [to_email], subject, content)
 
     try:
-        server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT)
-        server.login(SMTP_EMAIL, SMTP_PASSWORD)
-        server.sendmail(SMTP_EMAIL, [to_email], msg.as_string())
-        server.quit()
-        print("Email sent successfully!")
+        sg = SendGridAPIClient(SENDGRID_API_KEY)
+        response = sg.send(message)
+        print('Email sent successfully!')
     except Exception as e:
-        raise Exception(f"Failed to send email: {e}")
+        print(f"Failed to send email: {e}")
+        raise
