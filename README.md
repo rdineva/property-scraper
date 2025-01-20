@@ -1,4 +1,4 @@
-# Property Scraper
+# Properties Web Scraper
 
 Web Scraper for the register of public sales of properties by private bailiffs in Bulgaria.
 
