@@ -1,32 +1,36 @@
-from scraper import scrape, save_scraped_data
-from email_service import send_email
-from property import concatenate_properties
-from constants import BASE_PROPERTIES_URL, SOFIA_QUERY_PARAMS, PLOVDIV_QUERY_PARAMS, PER_PAGE_PARAM
+from firebase_db import initialize_firebase
+from services.scraper_service import scrape
+from services.database_service import save_scraped_data
+from services.email_service import send_email
+from models.property import concatenate_properties
+from constants import BASE_PROPERTIES_URL, SOFIA_QUERY_PARAMS, PLOVDIV_QUERY_PARAMS, PER_PAGE_PARAM, NO_PROPERTIES_FOUND_TEXT, SUCCESS_EMAIL_TITLE, NO_PROPERTIES_FOUND_TITLE
+from utils.helpers import flatten
 import os
 from dotenv import load_dotenv
-
 
 load_dotenv()
 
 RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL")
 
-scraped_properties = []
+def main():
+    # Initialize database
+    initialize_firebase()
 
-sofia_scraped = scrape(f"{BASE_PROPERTIES_URL}?{PER_PAGE_PARAM}&{SOFIA_QUERY_PARAMS}")
-scraped_properties.append(sofia_scraped)
+    # Scrape properties
+    sofia_scraped = scrape(f"{BASE_PROPERTIES_URL}?{PER_PAGE_PARAM}&{SOFIA_QUERY_PARAMS}")
+    plovdiv_scraped = scrape(f"{BASE_PROPERTIES_URL}?{PER_PAGE_PARAM}&{PLOVDIV_QUERY_PARAMS}")
+    scraped_properties = flatten([sofia_scraped, plovdiv_scraped])
 
-plovdiv_scraped = scrape(f"{BASE_PROPERTIES_URL}?{PER_PAGE_PARAM}&{PLOVDIV_QUERY_PARAMS}")
-scraped_properties.append(plovdiv_scraped)
+    # Save the new scraped properties
+    new_properties = save_scraped_data(scraped_properties)
 
-def flatten(nested_list):
-    return [item for sublist in nested_list for item in sublist]
+    # Send email notification
+    if new_properties:
+        property_details = concatenate_properties(new_properties)
+        send_email(SUCCESS_EMAIL_TITLE, property_details, RECEIVER_EMAIL)
+    else:
+        send_email(NO_PROPERTIES_FOUND_TITLE, NO_PROPERTIES_FOUND_TEXT, RECEIVER_EMAIL)
+        print(NO_PROPERTIES_FOUND_TEXT)
 
-properties = flatten(scraped_properties)
-new_properties = save_scraped_data(properties)
-
-if new_properties:
-    property_details = concatenate_properties(new_properties)
-    send_email("Нови Имоти от ЧСИ", property_details, RECEIVER_EMAIL)
-else:
-    send_email("Няма нови имоти", "-", RECEIVER_EMAIL)
-    print("Няма нови имоти според зададените критерии!")
+if __name__ == "__main__":
+    main()

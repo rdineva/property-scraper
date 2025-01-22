@@ -4,3 +4,7 @@ PER_PAGE_PARAM = "perpage=1000"
 PLOVDIV_QUERY_PARAMS = "court=16&city=3598"
 SOFIA_QUERY_PARAMS = "court=28&city=4389"
 VARNNA_QUERY_PARAMS = "court=3&city=648"
+
+SUCCESS_EMAIL_TITLE = "Нови Имоти от ЧСИ"
+NO_PROPERTIES_FOUND_TITLE = "Няма нови имоти"
+NO_PROPERTIES_FOUND_TEXT = "Не са намерени нови имоти според зададените критерии!"
